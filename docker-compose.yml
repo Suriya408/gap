@@ -1,15 +1,6 @@
-
 version: '3.8'
 services:
-  mongo:
-    image: mongo:6.0
-    container_name: mongo
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo_data:/data/db
-
-  jio-app:
+  app:
     build: .
     container_name: gap
     ports:
@@ -17,7 +8,15 @@ services:
     depends_on:
       - mongo
     environment:
-      SPRING_DATA_MONGODB_URI: mongodb://mongo:27017/jio
+      SPRING_DATA_MONGODB_URI: mongodb://mongo:27017/gap
+
+  mongo:
+    image: mongo:6.0
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
 
 volumes:
   mongo_data:
