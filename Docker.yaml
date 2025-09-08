@@ -1,0 +1,11 @@
+
+FROM maven:3.8.5-openjdk-17 AS build
+WORKDIR /app
+COPY . /app
+RUN mvn clean package -DskipTests
+
+FROM openjdk:17-jdk-slim
+WORKDIR /app
+COPY --from=build /app/target/*.jar gap.jar
+EXPOSE 8085
+ENTRYPOINT ["java", "-jar", "gap.jar"]
