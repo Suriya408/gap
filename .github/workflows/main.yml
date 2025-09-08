@@ -17,9 +17,8 @@ jobs:
           echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ vars.DOCKER_USERNAME }}" --password-stdin
       - name: Build and Push image
         run: |
-          chmod 777 ./gradlew
-          ./gradlew build
-          cd banking
+          chmod 777 mvnw
+          ./mvnw clean install
           IMAGE_NAME=${{ vars.DOCKER_USERNAME }}/gap:latest
           docker build -t "$IMAGE_NAME" -f Dockerfile .
           docker push "$IMAGE_NAME"
@@ -31,10 +30,10 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           script: |
             set -euo pipefail
-            if [ ! -d "$HOME/getting-started-app" ]; then
+            if [ ! -d "$HOME/gap" ]; then
               git clone https://github.com/Suriya408/gap "$HOME/gap"
             fi
-            cd "$HOME/gap/k8s"
+            cd "$HOME/gap"
             git pull origin main
             # Ensure Minikube is running
             if ! minikube status >/dev/null 2>&1; then
