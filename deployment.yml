@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gap
+  labels:
+    app: gap
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gap
+  template:
+    metadata:
+      labels:
+        app: gap
+    spec:
+      containers:
+        - name: gap
+          image: suriya408/gap:latest
+          ports:
+            - containerPort: 3000
+          imagePullPolicy: Always
+      imagePullSecrets:
+        - name: docker-secret
