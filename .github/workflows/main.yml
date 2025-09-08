@@ -54,7 +54,7 @@ jobs:
             if grep -qE 'image:\s' deployment.yml; then
               sed -i "s|image:\s*.*|image: ${{ vars.DOCKER_USERNAME }}/gap:latest|g" deployment.yml
             else
-              sed -i "/name:\s*getting-started-app/a \ \ \ \ \ \ \ \ image: ${{ vars.DOCKER_USERNAME }}/gap:latest" deployment.yml
+              sed -i "/name:\s*gap/a \ \ \ \ \ \ \ \ image: ${{ vars.DOCKER_USERNAME }}/gap:latest" deployment.yml
             fi
             if ! grep -q "imagePullSecrets:" deployment.yml; then
               awk '
@@ -67,10 +67,10 @@ jobs:
               if [ -s deployment.tmp ]; then mv deployment.tmp deployment.yml; fi
             fi
             if ! grep -q "imagePullPolicy:" deployment.yml; then
-              sed -i "/image:\s*${{ vars.DOCKER_USERNAME }}\/getting-started-app:latest/a \ \ \ \ \ \ \ \ imagePullPolicy: Always" deployment.yml
+              sed -i "/image:\s*${{ vars.DOCKER_USERNAME }}\/gap:latest/a \ \ \ \ \ \ \ \ imagePullPolicy: Always" deployment.yml
             else
               sed -i "s|imagePullPolicy:\s*.*|imagePullPolicy: Always|g" deployment.yml
             fi
             kubectl apply -f deployment.yml
             kubectl apply -f service.yml
-            kubectl rollout status deployment/getting-started-app --timeout=120s
+            kubectl rollout status deployment/gap --timeout=120s
