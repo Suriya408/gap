@@ -37,7 +37,7 @@ jobs:
           script: |
             set -euo pipefail
             if [ ! -d "$HOME/gap" ]; then
-              git clone https://github.com/Suriya408/gap "$HOME/gap"
+              git clone https://github.com/Suriya408/gap.git "$HOME/gap"
             fi
             cd "$HOME/gap"
             git pull origin main
