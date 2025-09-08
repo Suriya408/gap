@@ -15,13 +15,19 @@ jobs:
       - name: Log in to Docker Hub
         run: |
           echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ vars.DOCKER_USERNAME }}" --password-stdin
+          
       - name: Build and Push image
         run: |
           chmod 777 mvnw
           ./mvnw clean install
-          IMAGE_NAME=${{ vars.DOCKER_USERNAME }}/gap:latest
-          docker build -t "$IMAGE_NAME" -f Dockerfile .
-          docker push "$IMAGE_NAME"
+        
+          export DOCKER_USERNAME=${{ vars.DOCKER_USERNAME }}
+
+          # Build and push Docker image
+          docker compose -f docker-compose.yml build
+          docker compose -f docker-compose.yml push
+          
+          
       - name: Deploy to Minikube on EC2
         uses: appleboy/ssh-action@v1.2.0
         with:
